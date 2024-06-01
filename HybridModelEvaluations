@@ -1,3 +1,31 @@
+import nltk
+nltk.download('vader_lexicon')
+import pandas as pd
+from sklearn.model_selection import train_test_split
+# Load your dataset
+df = pd.read_csv('C:\\Users\\ethan\\Downloads\\Review, Sentiment - Sheet1
+(2).csv')
+# Assuming your dataset has the columns "text" for the review and
+"sentiment" for the labels
+X_train, X_test, y_train, y_test = train_test_split(df['review'],
+df['sentiment'], test_size=0.3, random_state=42)
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import make_pipeline
+model = make_pipeline(TfidfVectorizer(), MultinomialNB())
+# Fit the model
+model.fit(X_train, y_train)
+# Predict with the model
+ml_predictions = model.predict(X_test)
+from nltk.sentiment import SentimentIntensityAnalyzer
+sia = SentimentIntensityAnalyzer()
+# Apply VADER to each review and decide on positive or negative based on
+compound score
+vader_predictions = [1 if sia.polarity_scores(text)['compound'] > 0 else 0
+for text in X_test]
+
+
+
 import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score,
 f1_score
