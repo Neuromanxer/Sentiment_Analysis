@@ -1,0 +1,23 @@
+import numpy as np
+from sklearn.metrics import accuracy_score, precision_score, recall_score,
+f1_score
+# Get consensus predictions
+consensus_predictions = np.where(ml_predictions == vader_predictions,
+ml_predictions, -1)
+# Where consensus predictions are -1 (indicating disagreement), use ML
+predictions
+hybrid_predictions = np.where(consensus_predictions == -1, ml_predictions,
+consensus_predictions)
+# If there are no positive predictions, choose ML predictions for positive
+reviews
+if not np.any(hybrid_predictions == 1):
+hybrid_predictions = ml_predictions
+# Evaluate the hybrid model
+print("Evaluation Metrics:")
+print("Hybrid Model Accuracy:", accuracy_score(y_test,
+hybrid_predictions))
+print("Hybrid Model Precision:", precision_score(y_test,
+hybrid_predictions))
+print("Hybrid Model Recall:", recall_score(y_test, hybrid_predictions))
+print("Hybrid Model F1 Score:", f1_score(y_test, hybrid_predictions,
+average='binary'))
